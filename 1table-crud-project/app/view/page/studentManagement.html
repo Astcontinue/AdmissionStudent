@@ -111,47 +111,76 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">学生名字</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.name"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.name" :rules="textRules"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">照片</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.photo"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.photo"></v-text-field> -->
+              <v-file-input label="文件上传" outlined dense class="jh-v-input" dense single-line filled v-model="createItem.photo"></v-file-input>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">民族</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.ethnicgroup"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.ethnicgroup" :rules="textRules"></v-text-field>
             </v-col>
              
-            <v-col cols="12" sm="12" md="4">
+            <!-- <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">性别</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.gender"></v-text-field>
+            </v-col> -->
+            <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">性别</span>
+              <v-select class="jh-v-input" dense single-line filled v-model="createItem.gender" :items="selectItem.gender"></v-select>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">身份证号码</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.idcard"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.idcard" :rules="textRules" :counter="18"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">出生日期</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.dateOfBirth"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.dateOfBirth"></v-text-field> -->
+              <v-menu ref="menu" v-model="createItem.dateOfBirth" :close-on-content-click="false" :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
+                <template v-slot:activator="{ on, attrs }"><v-text-field class="jh-v-input" dense single-line filled v-model="date" v-bind="attrs" v-on="on" ></v-text-field></template>
+                <v-date-picker v-model="date" no-title scrollable locale="zh-cn">
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="menu = false">取消</v-btn>
+                  <v-btn text color="primary" @click="$refs.menu.save(date)">确定</v-btn>
+                </v-date-picker>
+                </v-menu>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">户口所在地</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.Placeofaccount"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.Placeofaccount" :rules="textRules"></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">联系方式1</span>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.Phonenumber1" :rules="textRules" :counter="11"></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">联系方式2</span>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.Phonenumber2" :rules="textRules" :counter="11"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">家庭住址</span>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.HomeAddress" :rules="textRules"></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">之前所在幼儿园</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.kindergarten"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.kindergarten" :rules="textRules"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">学生状态</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.studentStatus"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.studentStatus"></v-text-field> -->
+              <v-select class="jh-v-input" dense single-line filled v-model="createItem.studentStatus" :items="selectStudentstatus.studentStatus"></v-select>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -159,10 +188,10 @@ SQL END!-->
               <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.remarks"></v-text-field>
             </v-col>
              
-            <v-col cols="12" sm="12" md="4">
+            <!-- <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">最后操作时间</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.lastoperationAt"></v-text-field>
-            </v-col>
+            </v-col> -->
              
           </v-row>
 
@@ -190,27 +219,29 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">学生名字</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.name"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.name" :rules="textRules"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">照片</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.photo"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.photo"></v-text-field> -->
+              <v-file-input label="文件上传" outlined dense class="jh-v-input" dense single-line filled v-model="filecreateItem.photo"></v-file-input>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">民族</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.ethnicgroup"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.ethnicgroup" :rules="textRules"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">性别</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.gender"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.gender"></v-text-field> -->
+              <v-select class="jh-v-input" dense single-line filled v-model="updateItem.gender" :items="selectItem.gender" :rules="textRules"></v-select>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">身份证号码</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.idcard"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.idcard" :rules="textRules" :counter="18"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -220,17 +251,33 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">户口所在地</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.Placeofaccount"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.Placeofaccount" :rules="textRules"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">之前所在幼儿园</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.kindergarten"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.kindergarten" :rules="textRules"></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">联系方式1</span>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.Phonenumber1" :rules="textRules" :counter="11"required></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">联系方式2</span>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.Phonenumber2" :rules="textRules" :counter="11"required></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="4">
+              <span class="jh-input-label">家庭住址</span>
+              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.HomeAddress" :rules="textRules"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">学生状态</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.studentStatus"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.studentStatus"></v-text-field> -->
+              <v-select class="jh-v-input" dense single-line filled v-model="updateItem.studentStatus" :items="selectStudentstatus.studentStatus"></v-select>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -238,10 +285,10 @@ SQL END!-->
               <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.remarks"></v-text-field>
             </v-col>
              
-            <v-col cols="12" sm="12" md="4">
+            <!-- <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">最后操作时间</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.lastoperationAt"></v-text-field>
-            </v-col>
+            </v-col> -->
                        
           </v-row>
           <!-- 抽屉操作按钮 -->
@@ -303,6 +350,14 @@ new Vue({
     ],
     isHelpPageDrawerShown: false,
     isHelpPageDrawerLoaded: false,
+    //填写条件
+    textRules: [
+        v => !!v || '不能为空',
+      ],
+    // idcardRules:[
+    //     c => !!c || '身份证不能为空',
+    //     c => c.length = 18 || '身份证必须为18位',
+    // ],
     isMobile: window.innerWidth < 500,
     // 表格相关数据
     isTableZebraLineShown: true,
@@ -312,8 +367,16 @@ new Vue({
       ],
     },
     // 下拉选项
-    constantObj: {
-      gender: [{"value": null, "text": "全部"}, {"value": "male", "text": "男"}, {"value": "female", "text": "女"}],
+    // constantObj: {
+    //   gender: [{"value": null, "text": "全部"}, {"value": "male", "text": "男"}, {"value": "female", "text": "女"}],
+    // },
+    //性别上传
+    selectItem: {
+      gender: [{"value": null, "text": "  "}, {"value": "男", "text": "男"}, {"value": "女", "text": "女"}],
+    },
+    //学生状态上传
+    selectStudentstatus: {
+      studentStatus: [{"value": null, "text": "  "}, {"value": "active", "text": "active"}, {"value": "inactive", "text": "inactive"}],
     },
     serverSearchInput: {
       gender: null
@@ -332,11 +395,14 @@ new Vue({
       {text: "身份证号码", value: "idcard", width: 120}, 
       {text: "出生日期", value: "dateOfBirth", width: 120}, 
       {text: "户口所在地", value: "Placeofaccount", width: 120}, 
+      {text: "联系方式1", value: "Phonenumber1", width: 120},
+      {text: "联系方式2", value: "Phonenumber2", width: 120},
+      {text: "家庭住址", value: "HomeAddress", width: 120},
       {text: "之前所在幼儿园", value: "kindergarten", width: 120}, 
       {text: "学生状态", value: "studentStatus", width: 120}, 
       {text: "备注", value: "remarks", width: 120}, 
       {text: "最后操作时间", value: "lastoperationAt", width: 120}, 
-      {text: "操作者", value: "operationByUser", width: 120},
+      // {text: "操作者", value: "operationByUser", width: 120},
       {text: "操作时间", value: "operationAt", width: 250},
     ],
 
@@ -348,7 +414,13 @@ new Vue({
     updateItemId: null,
     updateActionData: {},
     deleteItem: {},
-    deleteItemId: null
+    deleteItemId: null,
+    //出生日期上传
+    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    menu: false,
+    // 照片上传
+    addItem: {},
+    addInputFile: null,
 
   }),
   watch: {
@@ -401,6 +473,11 @@ new Vue({
           await this.clearDeleteItem();
           await this.getTableData();
           break;
+        case 'filecreateItem':
+          await this.confirmCreateItemDialog(uiActionData);
+          await this.doCreateItem2(uiActionData);
+          await this.getTableData(uiActionData);
+          await this.closeCreateDrawer(uiActionData);
         default:
           console.error("[doUiAction] uiActionId not find", {uiActionId});
           break;
@@ -476,6 +553,7 @@ new Vue({
       this.isCreateDrawerShown = false;
       this.createItem = {};
       this.createActionData = null;
+      this.addInputFile = null;
     },
     // ---------- <<<<<<<<<<< 新增数据 uiAction ---------
     // ---------- 修改数据 uiAction >>>>>>>>>>>> --------
@@ -561,8 +639,41 @@ new Vue({
     async clearDeleteItem() {
       this.deleteItem = {};
       this.deleteItemId = null;
-    }
+    },
     // ---------- <<<<<<<<<<< 删除数据 uiAction ---------
+    // ---------- 文件上传 uiAction >>>>>>>>>>>> --------
+    async doCreateItem2() {
+      const { photo } = this.addItem;
+      const _this = this;
+      const result = await window.jianghuAxios.httpUploadByStream({ file: this.addInputFile, fileDirectory: 'testFile',
+        onProgress: (total, loaded) => {
+          let progress = Number((loaded * 100 / total).toFixed(2))
+          window.vtoast.loading(`文件上传进度${progress}%`);
+          if (progress === 100) {
+            window.vtoast.success('文件上传成功');
+          }
+        }
+      });
+      const { status } = result.data;
+      const { filename, downloadPath, binarySize } = result.data.appData.resultData;
+      if (status === 'success') {
+        await window.vtoast.loading("新增数据");
+        await window.jianghuAxios({
+          data: {
+            appData: {
+              pageId: 'studentManagement',
+              actionId: 'insertItem',
+              actionData: { photo }
+            }
+          }
+        })
+        await window.vtoast.success("新增数据成功");
+      } else {
+        await window.vtoast.fail("文件上传失败");
+      }
+
+    },
+    // ---------- <<<<<<<<<<< 文件上传 uiAction ---------
   }
 })
 </script>
