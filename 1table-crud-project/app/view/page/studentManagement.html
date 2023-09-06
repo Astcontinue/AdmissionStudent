@@ -246,7 +246,15 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">出生日期</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.dateOfBirth"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.dateOfBirth"></v-text-field> -->
+              <v-menu ref="menu" v-model="updateItem.dateOfBirth" :close-on-content-click="false" :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
+                <template v-slot:activator="{ on, attrs }"><v-text-field class="jh-v-input" dense single-line filled v-model="date" v-bind="attrs" v-on="on" ></v-text-field></template>
+                <v-date-picker v-model="date" no-title scrollable locale="zh-cn">
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="menu = false">取消</v-btn>
+                  <v-btn text color="primary" @click="$refs.menu.save(date)">确定</v-btn>
+                </v-date-picker>
+                </v-menu>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -421,7 +429,7 @@ new Vue({
     // 照片上传
     addItem: {},
     addInputFile: null,
-
+    filecreateItem:{},
   }),
   watch: {
     isHelpPageDrawerShown(val) {
