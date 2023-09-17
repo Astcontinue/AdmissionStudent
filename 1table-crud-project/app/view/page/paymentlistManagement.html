@@ -51,7 +51,7 @@ SQL END!-->
       <v-card class="rounded-lg">
         <v-row class="ma-0 pa-4">
           <!-- 新增按钮 -->
-          <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('startCreateItem')" small>新增
+          <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('startCreateItem')" small>批量打印
           </v-btn>
           <v-spacer></v-spacer>
           <!-- 搜索过滤 -->
@@ -71,6 +71,7 @@ SQL END!-->
           checkbox-color="success"
           :class="{'zebraLine': isTableZebraLineShown }"
           fixed-header
+          show-select
           class="jh-fixed-table-height elevation-0 mt-0 mb-xs-4">
           <!-- 表格操作按钮 -->
           <template v-slot:item.action="{ item }">
@@ -79,6 +80,9 @@ SQL END!-->
             </span>
             <span role="button" class="success--text font-weight-medium font-size-2" @click="doUiAction('deleteItem', item)">
               <v-icon size="16" class="success--text">mdi-trash-can-outline</v-icon>删除
+            </span>
+            <span role="button" class="success--text font-weight-medium font-size-2" @click="">
+              <v-icon size="16" class="success--text">mdi-note-edit-outline</v-icon>打印
             </span>
           </template>
           <!-- 没有数据 -->
