@@ -11,7 +11,7 @@
                 <!-- 头部内容 >>>>>>>>>>>>> -->
                 <div class="jh-page-second-bar px-8">
                     <div class="pt-3 text-h7 font-weight-bold">
-                        classManagement
+                      入学学生分班页面
                         <!-- 帮助页按钮 -->
                         <v-icon @click="isHelpPageDrawerShow = true" color="success" small>mdi-help-circle-outline</v-icon>
                     </div>
@@ -198,7 +198,7 @@ new Vue({
     // 面包屑
     breadcrumbs: [
       {
-        text: 'classManagement',
+        text: '页面四-入学学生分班页面',
         disabled: true,
       }
     ],
@@ -236,7 +236,7 @@ new Vue({
     tableButtonList: [
       {text: '修改', buttonType: 'edit', color: 'success', action: 'startUpdateItem'},
       {text: '删除', buttonType: 'delete', color: 'error', action: 'deleteItem'},
-      { text: 'regularstudents', buttonType: 'path', color: 'warning', path: 'regularstudentsManagementOfOneClass', action: 'redirect'}
+      { text: '查看本班学生信息', buttonType: 'path', color: 'warning', path: 'regularstudentsManagementOfOneClass', action: 'redirect'}
     ],
   }),
   computed: {
