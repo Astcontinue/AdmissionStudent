@@ -481,6 +481,7 @@ new Vue({
       await window.jhMask.hide();
       await window.vtoast.success("新增数据成功");
     },
+    
     async closeCreateDrawer() {
       this.isCreateDrawerShown = false;
       this.createItem = {};
@@ -498,7 +499,7 @@ new Vue({
     },
 
 
-    
+
     async prepareUpdateValidate() {
       if (await this.$refs.updateForm.validate()) {
         return true;
