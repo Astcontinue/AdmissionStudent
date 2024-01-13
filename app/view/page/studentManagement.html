@@ -31,7 +31,7 @@ SQL END!-->
           <v-breadcrumbs class="pb-3 pt-0 pl-0" :items="breadcrumbs" divider="-"></v-breadcrumbs>
         </v-col>
         <!-- 搜索条件表单 >>>>>>>> -->
-        <!-- <v-col cols="12" xs="12" sm="12" md="8" xl="9">
+        <v-col cols="12" xs="12" sm="12" md="8" xl="9">
           <v-row class="jh-backend-form-container justify-end ma-0 py-1 pb-xs-2">
             <v-col cols="12" xs="6" sm="6" md="4" xl="3" class="pa-xs-0 pb-2 pl-1 pl-xs-1">
               <v-select v-model="serverSearchInput.gender" color="success" prefix="性别：" class="jh-v-input bg-white" :items="constantObj.gender" dense filled single-line></v-select>
@@ -40,7 +40,7 @@ SQL END!-->
               查询
             </v-btn>
           </v-row>
-        </v-col> -->
+        </v-col>
         <!-- <<<<<<<< 搜索条件表单 -->
       </v-row>
     </div>
@@ -59,6 +59,7 @@ SQL END!-->
             <v-text-field color="success" v-model="searchInput" prefix="搜索：" class="jh-v-input" dense filled single-line></v-text-field>
           </v-col>
         </v-row>
+
         <!-- 表格 -->
         <v-data-table
           :headers="headers"
@@ -97,6 +98,7 @@ SQL END!-->
             <span class="ml-1">共{{pagination.itemsLength}}条</span>
           </template>
         </v-data-table>
+
       </v-card>
       <!-- 新增抽屉 -->
       <v-navigation-drawer v-if="isCreateDrawerShown" v-model="isCreateDrawerShown" :permanent="isCreateDrawerShown" fixed temporary right width="80%" class="elevation-24">
@@ -301,6 +303,7 @@ new Vue({
     searchInput: null,
     isTableLoading: true,
     tableData: [],
+    //展示数据头部字段
     headers: [
       {text: '操作', value: 'action', align: 'center', sortable: false, width: 120, class: 'fixed', cellClass: 'fixed'},
       {text: "ID", value: "id", width: 120},
@@ -320,7 +323,9 @@ new Vue({
 
     isCreateDrawerShown: false,
     createItem: {},
+
     createActionData: {},
+
     isUpdateDrawerShown: false,
     updateItem: {},
     updateItemId: null,
@@ -329,6 +334,7 @@ new Vue({
     deleteItemId: null
 
   }),
+
   watch: {
     isHelpPageDrawerShown(val) {
       if (val && !this.isHelpPageDrawerLoaded) {
@@ -336,47 +342,62 @@ new Vue({
       }
     },
   },
+
   async created() {
   },
+
   mounted() {
     this.doUiAction('getTableData');
   },
+
   methods: {
+    /**
+     * 具体方法展示
+     */
     async doUiAction(uiActionId, uiActionData) {
       switch (uiActionId) {
+        //获取数据
         case 'getTableData':
           await this.getTableData();
           break;
+        //开始创建项
         case 'startCreateItem':
           await this.prepareCreateFormData();
           await this.openCreateDrawer();
           break;
+        //创建项
         case 'createItem':
           await this.prepareCreateValidate();
           await this.confirmCreateItemDialog();
           await this.prepareDoCreateItem();
           await this.doCreateItem();
           await this.closeCreateDrawer();
+
           await this.getTableData();
           break;
+        //开始修改项
         case 'startUpdateItem':
           await this.prepareUpdateFormData(uiActionData);
           await this.openUpdateDrawer();
           break;
+        //修改项
         case 'updateItem':
           await this.prepareUpdateValidate();
           await this.confirmUpdateItemDialog();
           await this.prepareDoUpdateItem();
           await this.doUpdateItem();
           await this.closeUpdateDrawer();
+
           await this.getTableData();
           break;
+        //删除项
         case 'deleteItem':
           await this.prepareDeleteFormData(uiActionData);
           await this.confirmDeleteItemDialog();
           await this.prepareDoDeleteItem();
           await this.doDeleteItem();
           await this.clearDeleteItem();
+
           await this.getTableData();
           break;
         default:
@@ -384,16 +405,21 @@ new Vue({
           break;
       }
     },
+
     /**
      * 获取表格数据
      */
     async getTableData() {
+      //让表能展示数据
       this.isTableLoading = true;
+
       const backendSearchData = _.pickBy(this.serverSearchInput, ( fieldValue, fieldKey ) => {
         if(fieldValue !== null && fieldValue !== '') {
           return true;
         }
       });
+
+      //将请求数据封装成一个对象
       const rows = (await window.jianghuAxios({
         data: {
           appData: {
@@ -405,10 +431,13 @@ new Vue({
           }
         }
       })).data.appData.resultData.rows;
+      //将拿取到的数据给tableDate然后展示
       this.tableData = rows;
+      //当数据展示完毕，关闭数据展示
       this.isTableLoading = false;
     },
     // ---------- 新增数据 uiAction >>>>>>>>>> --------
+    //具体Action之前的准备操作
     async prepareCreateFormData() {
       this.createItem = {};
     },
@@ -417,6 +446,8 @@ new Vue({
       this.isCreateDrawerShown = true;
     },
 
+
+    //具体Action
     async prepareCreateValidate() {
       if (await this.$refs.createForm.validate()) {
         return true;
@@ -456,6 +487,7 @@ new Vue({
       this.createActionData = null;
     },
     // ---------- <<<<<<<<<<< 新增数据 uiAction ---------
+
     // ---------- 修改数据 uiAction >>>>>>>>>>>> --------
     async prepareUpdateFormData(funObj) {
       this.updateItem = _.cloneDeep(funObj);
@@ -465,6 +497,8 @@ new Vue({
       this.isUpdateDrawerShown = true;
     },
 
+
+    
     async prepareUpdateValidate() {
       if (await this.$refs.updateForm.validate()) {
         return true;
@@ -509,6 +543,7 @@ new Vue({
       this.updateItemId = null;
     },
     // ---------- <<<<<<<<<<< 修改数据 uiAction ---------
+
     // ---------- 删除数据 uiAction >>>>>>>>>>>> --------
     async prepareDeleteFormData(funObj) {
       this.deleteItem = _.cloneDeep(funObj);
