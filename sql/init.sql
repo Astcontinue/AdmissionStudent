@@ -89,7 +89,8 @@ CREATE TABLE `_page` (
 
 INSERT INTO `_page` (`id`,`pageId`,`pageFile`,`pageName`,`pageType`,`sort`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (2,'help','helpV4','帮助','dynamicInMenu','11','insert',NULL,NULL,NULL);
 INSERT INTO `_page` (`id`,`pageId`,`pageFile`,`pageName`,`pageType`,`sort`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (3,'login','loginV4','登陆','','','insert',NULL,NULL,NULL);
-INSERT INTO `_page` (`id`,`pageId`,`pageFile`,`pageName`,`pageType`,`sort`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (36,'studentManagement',NULL,'学生管理','showInMenu','5','insert',NULL,NULL,NULL);
+INSERT INTO `_page` (`id`, `pageId`, `pageFile`, `pageName`, `pageType`, `sort`, `operation`, `operationByUserId`, `operationByUser`, `operationAt`) VALUES (38, 'StudentInformation', NULL, '学生信息页面', 'showInMenu', '5', 'insert', NULL, NULL, NULL);
+
 
 
 
@@ -146,10 +147,11 @@ INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`acti
 INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (251,NULL,NULL,'allPage','logout','✅登出','service','{}','{\"service\": \"user\", \"serviceFunction\": \"logout\"}','','','insert',NULL,NULL,NULL);
 INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (253,NULL,NULL,'allPage','userInfo','✅获取用户信息','service','{}','{\"service\": \"user\", \"serviceFunction\": \"userInfo\"}','','','update',NULL,NULL,'2022-04-27T15:37:21+08:00');
 INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (258,NULL,NULL,'allPage','getConstantList','✅查询常量','sql','{}','{\"table\": \"_constant\", \"operation\": \"select\"}','','','insert',NULL,NULL,NULL);
-INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (357,NULL,NULL,'studentManagement','selectItemList','✅查询列表','sql','{}','{ \"table\": \"student\", \"operation\": \"select\" }','','','insert',NULL,NULL,NULL);
-INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (358,NULL,NULL,'studentManagement','insertItem','✅添加','sql','{}','{ \"table\": \"student\", \"operation\": \"insert\" }','','','insert',NULL,NULL,NULL);
-INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (359,NULL,NULL,'studentManagement','updateItem','✅更新','sql','{}','{ \"table\": \"student\", \"operation\": \"jhUpdate\" }','','','insert',NULL,NULL,NULL);
-INSERT INTO `_resource` (`id`,`accessControlTable`,`resourceHook`,`pageId`,`actionId`,`desc`,`resourceType`,`appDataSchema`,`resourceData`,`requestDemo`,`responseDemo`,`operation`,`operationByUserId`,`operationByUser`,`operationAt`) VALUES (360,NULL,NULL,'studentManagement','deleteItem','✅删除','sql','{}','{ \"table\": \"student\", \"operation\": \"jhDelete\" }','','','insert',NULL,NULL,NULL);
+INSERT INTO `_resource` (`id`, `accessControlTable`, `resourceHook`, `pageId`, `actionId`, `desc`, `resourceType`, `appDataSchema`, `resourceData`, `requestDemo`, `responseDemo`, `operation`, `operationByUserId`, `operationByUser`, `operationAt`) VALUES (365, NULL, NULL, 'StudentInformation', 'selectItemList', '✅查询列表', 'sql', '{}', '{ \"table\": \"student\", \"operation\": \"select\" }', NULL, NULL, 'insert', NULL, NULL, NULL);
+INSERT INTO `_resource` (`id`, `accessControlTable`, `resourceHook`, `pageId`, `actionId`, `desc`, `resourceType`, `appDataSchema`, `resourceData`, `requestDemo`, `responseDemo`, `operation`, `operationByUserId`, `operationByUser`, `operationAt`) VALUES (366, NULL, NULL, 'StudentInformation', 'insertItem', '✅添加', 'sql', '{}', '{ \"table\": \"student\", \"operation\": \"insert\" }', NULL, NULL, 'insert', NULL, NULL, NULL);
+INSERT INTO `_resource` (`id`, `accessControlTable`, `resourceHook`, `pageId`, `actionId`, `desc`, `resourceType`, `appDataSchema`, `resourceData`, `requestDemo`, `responseDemo`, `operation`, `operationByUserId`, `operationByUser`, `operationAt`) VALUES (367, NULL, NULL, 'StudentInformation', 'updateItem', '✅更新', 'sql', '{}', '{ \"table\": \"student\", \"operation\": \"jhUpdate\" }', NULL, NULL, 'insert', NULL, NULL, NULL);
+INSERT INTO `_resource` (`id`, `accessControlTable`, `resourceHook`, `pageId`, `actionId`, `desc`, `resourceType`, `appDataSchema`, `resourceData`, `requestDemo`, `responseDemo`, `operation`, `operationByUserId`, `operationByUser`, `operationAt`) VALUES (368, NULL, NULL, 'StudentInformation', 'deleteItem', '✅删除', 'sql', '{}', '{ \"table\": \"student\", \"operation\": \"jhDelete\" }', NULL, NULL, 'insert', NULL, NULL, NULL);
+
 
 
 
@@ -380,22 +382,24 @@ CREATE TABLE `_user_session` (
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `studentId` varchar(255) DEFAULT NULL COMMENT '学生ID',
-  `name` varchar(255) DEFAULT NULL COMMENT '学生名字',
-  `gender` varchar(255) DEFAULT NULL COMMENT '性别',
-  `dateOfBirth` varchar(255) DEFAULT NULL COMMENT '出生日期',
-  `classId` varchar(255) DEFAULT NULL COMMENT '班级ID',
-  `level` varchar(255) DEFAULT NULL COMMENT '年级',
-  `bodyHeight` varchar(255) DEFAULT NULL COMMENT '身高',
-  `studentStatus` varchar(255) DEFAULT NULL COMMENT '学生状态',
-  `remarks` mediumtext COMMENT '备注',
-  `operation` varchar(255) DEFAULT 'insert' COMMENT '操作; insert, update, jhInsert, jhUpdate, jhDelete jhRestore',
-  `operationByUserId` varchar(255) DEFAULT NULL COMMENT '操作者userId',
-  `operationByUser` varchar(255) DEFAULT NULL COMMENT '操作者用户名',
-  `operationAt` varchar(255) DEFAULT NULL COMMENT '操作时间; E.g: 2021-05-28T10:24:54+08:00 ',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `studentId` (`studentId`) USING BTREE
-) ENGINE = InnoDB;
+  `name` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '学生名字',
+  `gender` varchar(2) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '性别',
+  `dateOfBirth` datetime DEFAULT NULL COMMENT '出生日期',
+  `photo` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '照片',
+  `level` int(20) DEFAULT NULL COMMENT '年级',
+  `idcard` varchar(18) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '身份证',
+  `account` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '户口',
+  `phone_number1` int(11) DEFAULT NULL COMMENT '主要监护人电话号码',
+  `phone_number2` int(11) DEFAULT NULL COMMENT '其他号码',
+  `adress` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '家庭住址',
+  `education` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '教育经历',
+  `remarks` mediumtext COLLATE utf8mb4_bin COMMENT '备注',
+  `operation` varchar(255) COLLATE utf8mb4_bin DEFAULT 'insert' COMMENT '操作; insert, update, jhInsert, jhUpdate, jhDelete jhRestore',
+  `operationByUserId` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '操作者userId',
+  `operationByUser` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '操作者用户名',
+  `operationAt` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '操作时间; E.g: 2021-05-28T10:24:54+08:00 ',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
 
 
 
