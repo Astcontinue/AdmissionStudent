@@ -140,12 +140,23 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">性别</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.gender"></v-text-field>
+              <v-select class="jh-v-input" dense single-line filled v-model="createItem.gender" :items="genderOptions"></v-select>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">出生日期</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.dateOfBirth"></v-text-field>
+              <!-- <v-row>
+                <v-col cols="4">
+                  <v-select :items="years" v-model="createItem.year" label="年"></v-select>
+                </v-col>
+                <v-col cols="4">
+                  <v-select :items="months" v-model="createItem.month" label="月"></v-select>
+                </v-col>
+                <v-col cols="4">
+                  <v-select :items="days" v-model="createItem.day" label="日"></v-select>
+                </v-col>
+              </v-row> -->
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -159,8 +170,13 @@ SQL END!-->
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.idcard" :maxlength="18" :counter="18"></v-text-field> -->
               <span class="jh-input-label">身份证</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.idcard" :maxlength="18" :counter="true"></v-text-field>
+              <v-text-field class="jh-v-input" dense single-line filled v-model.trim="createItem.idcard" :maxlength="18">
+                <template v-slot:append>
+                  <span>{{ createIdcardLength }}/18</span>
+                </template>
+              </v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -225,12 +241,24 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">性别</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.gender"></v-text-field>
+              <v-select class="jh-v-input" dense single-line filled v-model="updateItem.gender" :items="genderOptions"></v-select>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">出生日期</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.dateOfBirth"></v-text-field>
+              <!-- <v-row>
+                <v-col cols="4">
+                  <v-select :items="years" v-model="updateItem.year" label="年"></v-select>
+                </v-col>
+                <v-col cols="4">
+                  <v-select :items="months" v-model="updateItem.month" label="月"></v-select>
+                </v-col>
+                <v-col cols="4">
+                  <v-select :items="days" v-model="updateItem.day" label="日"></v-select>
+                </v-col>
+              </v-row> -->
+            </v-col>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -245,7 +273,12 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">身份证</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.idcard"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.idcard"></v-text-field> -->
+              <v-text-field class="jh-v-input" dense single-line filled v-model.trim="updateItem.idcard" :maxlength="18">
+                <template v-slot:append>
+                  <span>{{ updateIdcardLength }}/18</span>
+                </template>
+              </v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -350,9 +383,28 @@ SQL END!-->
       // constantObj: {
       //   gender: [{"value": null, "text": "全部"}, {"value": "male", "text": "男"}, {"value": "female", "text": "女"}],
       // },
+
+      //性别选择
+      genderOptions: ['男', '女'],
       serverSearchInput: {
         gender: null
       },
+      //日期选择
+      // years: Array.from({length: 10}, (_, i) => new Date().getFullYear() - i).reverse(),
+      // months: Array.from({length: 12}, (_, i) => i + 1),
+      // days: Array.from({length: 31}, (_, i) => i + 1),
+      // createItem: {
+      //   year: null,
+      //   month: null,
+      //   day: null,
+      // },
+      // updateItem: {
+      //   year: null,
+      //   month: null,
+      //   day: null,
+      // },
+
+
       searchInput: null,
       isTableLoading: true,
       tableData: [],
@@ -388,13 +440,15 @@ SQL END!-->
 
     }),
 
-    //字数提示与限制
+    //身份证字数提示与限制
     computed: {
-      idcardLength() {
-        return this.createItem.idcard.length;
+      createIdcardLength() {
+        return this.createItem.idcard ? this.createItem.idcard.length : 0;
+      },
+      updateIdcardLength() {
+        return this.updateItem.idcard ? this.updateItem.idcard.length : 0;
       }
     },
-
 
     watch: {
       isHelpPageDrawerShown(val) {
