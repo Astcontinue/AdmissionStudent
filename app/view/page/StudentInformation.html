@@ -32,18 +32,18 @@ SQL END!-->
           <v-breadcrumbs class="pb-3 pt-0 pl-0" :items="breadcrumbs" divider="-"></v-breadcrumbs>
         </v-col>
         <!-- 搜索条件表单 >>>>>>>> -->
-        <!--<v-col cols="12" xs="12" sm="12" md="8" xl="9">
+        <v-col cols="12" xs="12" sm="12" md="8" xl="9">
           <v-row class="jh-backend-form-container justify-end ma-0 py-3">
             <v-col cols="12" xs="6" sm="6" md="4" xl="3" class="pa-0 pr-0 pr-sm-2">
-              <v-select v-model="serverSearchInput.gender" color="success" prefix="性别：" class="jh-v-input bg-white" :items="constantObj.gender" dense filled single-line></v-select>
+              <v-select v-model="serverSearchInput.level" color="success" prefix="年级（届）：" class="jh-v-input bg-white" :items="levels" dense filled single-line></v-select>
             </v-col>
             <div class="jh-backend-search-btn">
-              <v-btn class="elevation-0 float-right mt-2 mt-md-0" color="success" small @click="doUiAction('getTableData')">
+              <v-btn class="elevation-0 float-right mt-2 mt-md-0" color="success" small @click="doQuery">
                 查询
               </v-btn>
             </div>
           </v-row>
-        </v-col>-->
+        </v-col>
         <!-- <<<<<<<< 搜索条件表单 -->
       </v-row>
     </div>
@@ -186,12 +186,22 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">主要监护人电话号码</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.phone_number1"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.phone_number1"></v-text-field> -->
+              <v-text-field class="jh-v-input" dense single-line filled v-model.trim="createItem.phone_number1" :maxlength="11">
+                <template v-slot:append>
+                  <span>{{ createPhoneNumber1Length }}/11</span>
+                </template>
+              </v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">其他号码</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.phone_number2"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.phone_number2"></v-text-field> -->
+              <v-text-field class="jh-v-input" dense single-line filled v-model.trim="createItem.phone_number2" :maxlength="11">
+                <template v-slot:append>
+                  <span>{{ createPhoneNumber2Length }}/11</span>
+                </template>
+              </v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -380,15 +390,19 @@ SQL END!-->
         ],
       },
       // 下拉选项
-      // constantObj: {
-      //   gender: [{"value": null, "text": "全部"}, {"value": "male", "text": "男"}, {"value": "female", "text": "女"}],
-      // },
+      created() {
+        this.fetchGrades(); // 获取年级数据
+      },
 
       //性别选择
       genderOptions: ['男', '女'],
+
       serverSearchInput: {
-        gender: null
+        gender: null,
+        level: null, //选中的年级(届)
       },
+      levels: [], // 年级数据
+
       //日期选择
       // years: Array.from({length: 10}, (_, i) => new Date().getFullYear() - i).reverse(),
       // months: Array.from({length: 12}, (_, i) => i + 1),
@@ -440,14 +454,29 @@ SQL END!-->
 
     }),
 
-    //身份证字数提示与限制
+    //身份证和电话号码字数提示与限制
     computed: {
+      //身份证
       createIdcardLength() {
         return this.createItem.idcard ? this.createItem.idcard.length : 0;
       },
       updateIdcardLength() {
         return this.updateItem.idcard ? this.updateItem.idcard.length : 0;
-      }
+      },
+      //主要监护人电话号码
+      createPhoneNumber1Length() {
+        return this.createItem.phone_number1 ? this.createItem.phone_number1 : 0;
+      },
+      updatePhoneNumber1Length() {
+        return this.updateItem.phone_number1 ? this.updateItem.phone_number1 : 0;
+      },
+      //其他号码
+      createPhoneNumber2Length() {
+        return this.createItem.phone_number2 ? this.createItem.phone_number2 : 0;
+      },
+      updatePhoneNumber2Length() {
+        return this.updateItem.phone_number2 ? this.updateItem.phone_number2 : 0;
+      },
     },
 
     watch: {
@@ -461,6 +490,9 @@ SQL END!-->
     },
     mounted() {
       this.doUiAction('getTableData');
+      //这里generatePastYears()方法的参数为指定可以查询过去多少年的学生
+      this.levels = this.generatePastLevels(20);
+      this.levels.unshift({text: '全部', value: null}); // 添加 "全部" 年级选项
     },
     methods: {
       async doUiAction(uiActionId, uiActionData) {
@@ -664,8 +696,29 @@ SQL END!-->
       async clearDeleteItem() {
         this.deleteItem = {};
         this.deleteItemId = null;
-      }
+      },
       // ---------- <<<<<<<<<<< 删除数据 uiAction ---------
+
+      // ---------- <<<<<<<<<<< 根据条件筛选出对应的年级（届）和查找完毕返回全部数据 ---------
+      generatePastLevels(n) {
+        const currentLevel = new Date().getFullYear();
+        return Array.from({ length: n }, (_, i) => ({ text: `${currentLevel - i}`, value: currentLevel - i }));
+      },
+      doQuery() {
+        // 保存当前的查询条件
+        const currentLevel = this.serverSearchInput.level;
+
+        // 执行查询操作
+        this.doUiAction('getTableData');
+
+        // 如果选中的是 "全部"，则恢复查询条件
+        if (currentLevel === null) {
+          this.serverSearchInput.level = null;
+        }
+      }
+      // ---------- 根据条件筛选出对应的年级（届）和查找完毕返回全部数据 >>>>>>>>>>>> --------
+
+
     }
   })
 </script>
