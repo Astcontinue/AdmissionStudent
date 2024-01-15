@@ -391,7 +391,7 @@ CREATE TABLE `student` (
   `account` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '户口',
   `phone_number1` int(11) DEFAULT NULL COMMENT '主要监护人电话号码',
   `phone_number2` int(11) DEFAULT NULL COMMENT '其他号码',
-  `adress` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '家庭住址',
+  `address` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '家庭住址',
   `education` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '教育经历',
   `remarks` mediumtext COLLATE utf8mb4_bin COMMENT '备注',
   `operation` varchar(255) COLLATE utf8mb4_bin DEFAULT 'insert' COMMENT '操作; insert, update, jhInsert, jhUpdate, jhDelete jhRestore',
