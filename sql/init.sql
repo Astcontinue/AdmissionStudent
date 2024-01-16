@@ -404,6 +404,27 @@ CREATE TABLE `student` (
 
 
 
+# ------------------------------------------------------------
+# SCHEMA DUMP FOR TABLE: student_grades
+# ------------------------------------------------------------
+CREATE TABLE `student_grades` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_id` int(11) DEFAULT NULL COMMENT '学生Id',
+  `name` varchar(32) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '姓名',
+  `level` int(20) DEFAULT NULL COMMENT '参与时间',
+  `student_grade` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '学生成绩',
+  `admissionstutas` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '录取状态',
+  `operation` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `operationByUserId` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `operationByUser` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `operationAt` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
+
+
+
+
+
 
 
 # ------------------------------------------------------------
