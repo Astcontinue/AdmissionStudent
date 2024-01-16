@@ -23,7 +23,7 @@ SQL END!-->
     <div class="jh-page-second-bar px-8">
       <v-row class="align-center">
         <v-col cols="12" xs="12" sm="12" md="4" xl="3">
-          <div class="py-4 text-body-1 font-weight-bold">学生信息页面
+          <div class="py-4 text-body-1 font-weight-bold">学生信息页面（未录取的）
             <!-- 帮助页按钮 -->
             <span role="button" class="success--text font-weight-regular jh-font-size-13 ml-2" @click="isHelpPageDrawerShown = true">
               <v-icon size="13" class="success--text">mdi-help-circle-outline</v-icon>帮助
@@ -35,7 +35,7 @@ SQL END!-->
         <v-col cols="12" xs="12" sm="12" md="8" xl="9">
           <v-row class="jh-backend-form-container justify-end ma-0 py-3">
             <v-col cols="12" xs="6" sm="6" md="4" xl="3" class="pa-0 pr-0 pr-sm-2">
-              <v-select v-model="serverSearchInput.level" color="success" prefix="年级（届）：" class="jh-v-input bg-white" :items="levels" dense filled single-line></v-select>
+              <v-select v-model="serverSearchInput.level" color="success" prefix="参与时间（年）" class="jh-v-input bg-white" :items="levels" dense filled single-line></v-select>
             </v-col>
             <div class="jh-backend-search-btn">
               <v-btn class="elevation-0 float-right mt-2 mt-md-0" color="success" small @click="doQuery">
@@ -74,6 +74,8 @@ SQL END!-->
           checkbox-color="success"
           :class="{'zebraLine': isTableZebraLineShown }"
           fixed-header
+          
+          show-select
           class="jh-fixed-table-height elevation-0 mt-0 mb-xs-4">
           <!-- 表格操作按钮 -->
           <template v-slot:item.action="{ item }">
@@ -145,8 +147,8 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">出生日期</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.dateOfBirth"></v-text-field>
-              <!-- <v-row>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.dateOfBirth"></v-text-field> -->
+              <v-row>
                 <v-col cols="4">
                   <v-select :items="years" v-model="createItem.year" label="年"></v-select>
                 </v-col>
@@ -156,7 +158,7 @@ SQL END!-->
                 <v-col cols="4">
                   <v-select :items="days" v-model="createItem.day" label="日"></v-select>
                 </v-col>
-              </v-row> -->
+              </v-row>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -165,7 +167,7 @@ SQL END!-->
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
-              <span class="jh-input-label">年级</span>
+              <span class="jh-input-label">参与时间</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.level"></v-text-field>
             </v-col>
              
@@ -255,20 +257,8 @@ SQL END!-->
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
-              <span class="jh-input-label">出生日期</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.dateOfBirth"></v-text-field>
-              <!-- <v-row>
-                <v-col cols="4">
-                  <v-select :items="years" v-model="updateItem.year" label="年"></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select :items="months" v-model="updateItem.month" label="月"></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select :items="days" v-model="updateItem.day" label="日"></v-select>
-                </v-col>
-              </v-row> -->
-            </v-col>
+            <span class="jh-input-label">出生日期</span>
+            <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.dateOfBirth"></v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -277,7 +267,7 @@ SQL END!-->
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
-              <span class="jh-input-label">年级</span>
+              <span class="jh-input-label">参与时间</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.level"></v-text-field>
             </v-col>
              
@@ -298,12 +288,22 @@ SQL END!-->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">主要监护人电话号码</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.phone_number1"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.phone_number1"></v-text-field> -->
+              <v-text-field class="jh-v-input" dense single-line filled v-model.trim="updateItem.phone_number1" :maxlength="11">
+                <template v-slot:append>
+                  <span>{{ updatePhoneNumber1Length }}/11</span>
+                </template>
+              </v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">其他号码</span>
-              <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.phone_number2"></v-text-field>
+              <!-- <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.phone_number2"></v-text-field> -->
+              <v-text-field class="jh-v-input" dense single-line filled v-model.trim="updateItem.phone_number2" :maxlength="11">
+                <template v-slot:append>
+                  <span>{{ updatePhoneNumber2Length }}/11</span>
+                </template>
+              </v-text-field>
             </v-col>
              
             <v-col cols="12" sm="12" md="4">
@@ -375,7 +375,7 @@ SQL END!-->
           disabled: true,
         },
         {
-          text: 'StudentInformation',
+          text: 'StudentInformation（Not admitted）',
           disabled: true,
         }
       ],
@@ -389,34 +389,20 @@ SQL END!-->
           v => !!v || 'This is required',
         ],
       },
-      // 下拉选项
-      created() {
-        this.fetchGrades(); // 获取年级数据
-      },
 
       //性别选择
       genderOptions: ['男', '女'],
 
       serverSearchInput: {
         gender: null,
-        level: null, //选中的年级(届)
+        level: null, //选中的录入时间(届)
       },
-      levels: [], // 年级数据
+      levels: [], // 录入时间数据
 
       //日期选择
-      // years: Array.from({length: 10}, (_, i) => new Date().getFullYear() - i).reverse(),
-      // months: Array.from({length: 12}, (_, i) => i + 1),
-      // days: Array.from({length: 31}, (_, i) => i + 1),
-      // createItem: {
-      //   year: null,
-      //   month: null,
-      //   day: null,
-      // },
-      // updateItem: {
-      //   year: null,
-      //   month: null,
-      //   day: null,
-      // },
+      years: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).reverse(),
+      months: Array.from({ length: 12 }, (_, i) => i + 1),
+      days: Array.from({ length: 31 }, (_, i) => i + 1),
 
 
       searchInput: null,
@@ -429,7 +415,7 @@ SQL END!-->
         { text: "性别", value: "gender", width: 120 },
         { text: "出生日期", value: "dateOfBirth", width: 120 },
         { text: "照片", value: "photo", width: 120 },
-        { text: "年级", value: "level", width: 120 },
+        { text: "参与时间", value: "level", width: 120 },
         { text: "身份证", value: "idcard", width: 120 },
         { text: "户口", value: "account", width: 120 },
         { text: "主要监护人电话号码", value: "phone_number1", width: 120 },
@@ -443,7 +429,11 @@ SQL END!-->
       ],
 
       isCreateDrawerShown: false,
-      createItem: {},
+      createItem: {
+        year: null,
+        month: null,
+        day: null,
+      },
       createActionData: {},
       isUpdateDrawerShown: false,
       updateItem: {},
@@ -465,17 +455,24 @@ SQL END!-->
       },
       //主要监护人电话号码
       createPhoneNumber1Length() {
-        return this.createItem.phone_number1 ? this.createItem.phone_number1 : 0;
+        return this.createItem.phone_number1 ? this.createItem.phone_number1.length : 0;
       },
       updatePhoneNumber1Length() {
-        return this.updateItem.phone_number1 ? this.updateItem.phone_number1 : 0;
+        return this.updateItem.phone_number1 ? this.updateItem.phone_number1.length : 0;
       },
       //其他号码
       createPhoneNumber2Length() {
-        return this.createItem.phone_number2 ? this.createItem.phone_number2 : 0;
+        return this.createItem.phone_number2 ? this.createItem.phone_number2.length : 0;
       },
       updatePhoneNumber2Length() {
-        return this.updateItem.phone_number2 ? this.updateItem.phone_number2 : 0;
+        return this.updateItem.phone_number2 ? this.updateItem.phone_number2.length : 0;
+      },
+      //将三个选择器拿到的数据合并插入数据库表中
+      createItemDateOfBirth() {
+        if (this.createItem.year && this.createItem.month && this.createItem.day) {
+          return `${this.createItem.year}-${this.createItem.month.toString().padStart(2, '0')}-${this.createItem.day.toString().padStart(2, '0')}`;
+        }
+        return null;
       },
     },
 
@@ -492,7 +489,9 @@ SQL END!-->
       this.doUiAction('getTableData');
       //这里generatePastYears()方法的参数为指定可以查询过去多少年的学生
       this.levels = this.generatePastLevels(20);
-      this.levels.unshift({text: '全部', value: null}); // 添加 "全部" 年级选项
+      this.levels.unshift({ text: '全部', value: null }); // 添加 "全部" 选项
+      //回显更改数据表单中的时间数据
+      //this.fetchItem();
     },
     methods: {
       async doUiAction(uiActionId, uiActionData) {
@@ -560,8 +559,9 @@ SQL END!-->
         })).data.appData.resultData.rows;
 
         rows.forEach(row => {
-          row.operationAt = dayjs(row.operationAt).format('YYYY-MM-DD HH:mm:ss');
+          row.operationAt = dayjs(row.operationAt).format('YYYY-MM-DD');
         })
+
         this.tableData = rows;
         this.isTableLoading = false;
       },
@@ -588,7 +588,9 @@ SQL END!-->
       },
 
       prepareDoCreateItem() {
-        const { id, ...data } = this.createItem;
+        const { id, year, month, day, ...data } = this.createItem;
+        //将单独的year、month和day列合并成一个整体
+        data.dateOfBirth = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
         this.createActionData = data;
       },
 
@@ -699,7 +701,7 @@ SQL END!-->
       },
       // ---------- <<<<<<<<<<< 删除数据 uiAction ---------
 
-      // ---------- <<<<<<<<<<< 根据条件筛选出对应的年级（届）和查找完毕返回全部数据 ---------
+      // ---------- <<<<<<<<<<< 根据条件筛选出对应的录入时间（年）和查找完毕返回全部数据 ---------
       generatePastLevels(n) {
         const currentLevel = new Date().getFullYear();
         return Array.from({ length: n }, (_, i) => ({ text: `${currentLevel - i}`, value: currentLevel - i }));
@@ -715,9 +717,8 @@ SQL END!-->
         if (currentLevel === null) {
           this.serverSearchInput.level = null;
         }
-      }
-      // ---------- 根据条件筛选出对应的年级（届）和查找完毕返回全部数据 >>>>>>>>>>>> --------
-
+      },
+      // ---------- 根据条件筛选出对应的录入时间（年）和查找完毕返回全部数据 >>>>>>>>>>>> --------
 
     }
   })
