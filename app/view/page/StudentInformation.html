@@ -56,6 +56,8 @@ SQL END!-->
           <!-- 新增按钮 -->
           <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('startCreateItem')" small>新增
           </v-btn>
+          <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('insertSelecteItems')" small>插入选中项
+          </v-btn>
           <v-spacer></v-spacer>
           <!-- 搜索过滤 -->
           <v-col cols="12" xs="8" sm="4" md="3" xl="2" class="pa-0">
@@ -74,7 +76,8 @@ SQL END!-->
           checkbox-color="success"
           :class="{'zebraLine': isTableZebraLineShown }"
           fixed-header
-          
+          :item-key="'id'"
+          @select="onSelect"
           show-select
           class="jh-fixed-table-height elevation-0 mt-0 mb-xs-4">
           <!-- 表格操作按钮 -->
@@ -407,6 +410,8 @@ SQL END!-->
 
       searchInput: null,
       isTableLoading: true,
+      selectedItems: [], // 用于保存选中的项
+      insertSelecteItems: [],
       tableData: [],
       headers: [
         { text: "ID", value: "id", width: 90 },
@@ -530,6 +535,10 @@ SQL END!-->
             await this.doDeleteItem();
             await this.clearDeleteItem();
             await this.getTableData();
+            break;
+          case 'insertSelecteItems':
+            await this.onSelect(insertSelecteItems);
+            this.insertSelectedItems();
             break;
           default:
             console.error("[doUiAction] uiActionId not find", { uiActionId });
@@ -720,6 +729,36 @@ SQL END!-->
       },
       // ---------- 根据条件筛选出对应的录入时间（年）和查找完毕返回全部数据 >>>>>>>>>>>> --------
 
+      // ---------- <<<<<<<<<<< 批量插入数据 ---------
+      onSelect(insertSelecteItems) {
+        // 将选中的项保存到一个变量中
+        this.selectedItems = insertSelecteItems;
+      },
+      async insertSelectedItems() {
+        for (const item of this.selectedItems) {
+          const pkg = {
+            packageId: '123456',
+            packageType: 'httpRequest',
+            appData: {
+              appId: `${window.appInfo.appId}`,
+              pageId: 'StudentGradeInformation',
+              actionId: 'insertItem',
+              userAgent: 'demo_userAgent',
+              authToken: localStorage.getItem(`${window.appInfo.appId}_authToken`),
+              actionData: {
+                student_id: item.id,
+                name: item.name,
+                level: item.level,
+              },
+              // 如果需要，你可以在这里添加过滤条件
+            }
+          };
+          const result = await axios(pkg);
+          const rows = result.data.appData.resultData.rows;
+          console.log('rows', rows);
+        }
+      },
+      // ---------- 批量插入数据 >>>>>>>>>>>> --------
     }
   })
 </script>
