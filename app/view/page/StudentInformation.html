@@ -56,8 +56,8 @@ SQL END!-->
           <!-- 新增按钮 -->
           <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('startCreateItem')" small>新增
           </v-btn>
-          <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('insertSelecteItems')" small>插入选中项
-          </v-btn>
+          <!-- <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('insertSelectedItems')" small>插入选中项
+          </v-btn> -->
           <v-spacer></v-spacer>
           <!-- 搜索过滤 -->
           <v-col cols="12" xs="8" sm="4" md="3" xl="2" class="pa-0">
@@ -76,10 +76,11 @@ SQL END!-->
           checkbox-color="success"
           :class="{'zebraLine': isTableZebraLineShown }"
           fixed-header
-          :item-key="'id'"
-          @select="onSelect"
-          show-select
           class="jh-fixed-table-height elevation-0 mt-0 mb-xs-4">
+
+          <!-- :item-key="'id'"
+          @select="onSelect"
+          show-select  -->
           <!-- 表格操作按钮 -->
           <template v-slot:item.action="{ item }">
             <!-- pc端 -->
@@ -164,10 +165,10 @@ SQL END!-->
               </v-row>
             </v-col>
              
-            <v-col cols="12" sm="12" md="4">
+            <!-- <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">照片</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="createItem.photo"></v-text-field>
-            </v-col>
+            </v-col> -->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">参与时间</span>
@@ -264,10 +265,10 @@ SQL END!-->
             <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.dateOfBirth"></v-text-field>
             </v-col>
              
-            <v-col cols="12" sm="12" md="4">
+            <!-- <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">照片</span>
               <v-text-field class="jh-v-input" dense single-line filled v-model="updateItem.photo"></v-text-field>
-            </v-col>
+            </v-col> -->
              
             <v-col cols="12" sm="12" md="4">
               <span class="jh-input-label">参与时间</span>
@@ -411,7 +412,7 @@ SQL END!-->
       searchInput: null,
       isTableLoading: true,
       selectedItems: [], // 用于保存选中的项
-      insertSelecteItems: [],
+      // insertSelecteItems: [],
       tableData: [],
       headers: [
         { text: "ID", value: "id", width: 90 },
@@ -419,7 +420,7 @@ SQL END!-->
         { text: "学生名字", value: "name", width: 120 },
         { text: "性别", value: "gender", width: 120 },
         { text: "出生日期", value: "dateOfBirth", width: 120 },
-        { text: "照片", value: "photo", width: 120 },
+        // { text: "照片", value: "photo", width: 120 },
         { text: "参与时间", value: "level", width: 120 },
         { text: "身份证", value: "idcard", width: 120 },
         { text: "户口", value: "account", width: 120 },
@@ -536,10 +537,10 @@ SQL END!-->
             await this.clearDeleteItem();
             await this.getTableData();
             break;
-          case 'insertSelecteItems':
-            await this.onSelect(insertSelecteItems);
-            this.insertSelectedItems();
-            break;
+          // case 'insertSelecteItems':
+          //   await this.onSelect(insertSelecteItems);
+          //   this.insertSelectedItems();
+          //  break;
           default:
             console.error("[doUiAction] uiActionId not find", { uiActionId });
             break;
@@ -624,6 +625,7 @@ SQL END!-->
         this.createActionData = null;
       },
       // ---------- <<<<<<<<<<< 新增数据 uiAction ---------
+
       // ---------- 修改数据 uiAction >>>>>>>>>>>> --------
       async prepareUpdateFormData(funObj) {
         this.updateItem = _.cloneDeep(funObj);
@@ -677,6 +679,7 @@ SQL END!-->
         this.updateItemId = null;
       },
       // ---------- <<<<<<<<<<< 修改数据 uiAction ---------
+
       // ---------- 删除数据 uiAction >>>>>>>>>>>> --------
       async prepareDeleteFormData(funObj) {
         this.deleteItem = _.cloneDeep(funObj);
@@ -729,36 +732,36 @@ SQL END!-->
       },
       // ---------- 根据条件筛选出对应的录入时间（年）和查找完毕返回全部数据 >>>>>>>>>>>> --------
 
-      // ---------- <<<<<<<<<<< 批量插入数据 ---------
-      onSelect(insertSelecteItems) {
-        // 将选中的项保存到一个变量中
-        this.selectedItems = insertSelecteItems;
-      },
-      async insertSelectedItems() {
-        for (const item of this.selectedItems) {
-          const pkg = {
-            packageId: '123456',
-            packageType: 'httpRequest',
-            appData: {
-              appId: `${window.appInfo.appId}`,
-              pageId: 'StudentGradeInformation',
-              actionId: 'insertItem',
-              userAgent: 'demo_userAgent',
-              authToken: localStorage.getItem(`${window.appInfo.appId}_authToken`),
-              actionData: {
-                student_id: item.id,
-                name: item.name,
-                level: item.level,
-              },
-              // 如果需要，你可以在这里添加过滤条件
-            }
-          };
-          const result = await axios(pkg);
-          const rows = result.data.appData.resultData.rows;
-          console.log('rows', rows);
-        }
-      },
-      // ---------- 批量插入数据 >>>>>>>>>>>> --------
+  //     // ---------- <<<<<<<<<<< 批量插入数据 ---------
+  //     onSelect(insertSelecteItems) {
+  //       // 将选中的项保存到一个变量中
+  //       this.selectedItems = insertSelecteItems;
+  //     },
+  //     async insertSelectedItems() {
+  //       for (const item of this.selectedItems) {
+  //         const pkg = {
+  //           packageId: '123456',
+  //           packageType: 'httpRequest',
+  //           appData: {
+  //             appId: `${window.appInfo.appId}`,
+  //             pageId: 'StudentGradeInformation',
+  //             actionId: 'insertItem',
+  //             userAgent: 'demo_userAgent',
+  //             authToken: localStorage.getItem(`${window.appInfo.appId}_authToken`),
+  //             actionData: {
+  //               student_id: item.id,
+  //               name: item.name,
+  //               level: item.level,
+  //             },
+  //             // 如果需要，你可以在这里添加过滤条件
+  //           }
+  //         };
+  //         const result = await axios(pkg);
+  //         const rows = result.data.appData.resultData.rows;
+  //         console.log('rows', rows);
+  //       }
+  //     },
+  //     // ---------- 批量插入数据 >>>>>>>>>>>> --------
     }
   })
 </script>
