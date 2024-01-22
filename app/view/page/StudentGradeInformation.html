@@ -23,7 +23,7 @@ SQL END!-->
     <div class="jh-page-second-bar px-8">
       <v-row class="align-center">
         <v-col cols="12" xs="12" sm="12" md="4" xl="3">
-          <div class="py-4 text-body-1 font-weight-bold">StudentGradeInformation
+          <div class="py-4 text-body-1 font-weight-bold">学生成绩页面
             <!-- 帮助页按钮 -->
             <span role="button" class="success--text font-weight-regular jh-font-size-13 ml-2" @click="isHelpPageDrawerShown = true">
               <v-icon size="13" class="success--text">mdi-help-circle-outline</v-icon>帮助
@@ -31,10 +31,10 @@ SQL END!-->
           </div>
         </v-col>
         <!-- 搜索条件表单 >>>>>>>> -->
-        <!-- <v-col cols="12" xs="12" sm="12" md="8" xl="9">
+        <v-col cols="12" xs="12" sm="12" md="8" xl="9">
           <v-row class="jh-backend-form-container justify-end ma-0 py-3">
             <v-col cols="12" xs="6" sm="6" md="4" xl="3" class="pa-0 pr-0 pr-sm-2">
-              <v-select v-model="serverSearchInput.gender" color="success" prefix="性别：" class="jh-v-input bg-white" :items="constantObj.gender" dense filled single-line></v-select>
+              <v-select v-model="serverSearchInput.level" color="success" prefix="参与实时间（年）" class="jh-v-input bg-white" :items="levels" dense filled single-line></v-select>
             </v-col>
             <div class="jh-backend-search-btn">
               <v-btn class="elevation-0 float-right mt-2 mt-md-0" color="success" small @click="doUiAction('getTableData')">
@@ -42,7 +42,7 @@ SQL END!-->
               </v-btn>
             </div>
           </v-row>
-        </v-col> -->
+        </v-col>
         <!-- <<<<<<<< 搜索条件表单 -->
       </v-row>
     </div>
@@ -53,7 +53,9 @@ SQL END!-->
       <v-card class="rounded-lg">
         <v-row class="ma-0 pa-4">
           <!-- 新增按钮 -->
-          <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('startCreateItem')" small>新增
+          <!-- <v-btn color="success" class="elevation-0 mr-2" @click="doUiAction('startCreateItem')" small>新增
+          </v-btn> -->
+          <v-btn color="success" class="elevation-0 mr-2" @click="" small>导入学生成绩
           </v-btn>
           <v-spacer></v-spacer>
           <!-- 搜索过滤 -->
@@ -81,6 +83,9 @@ SQL END!-->
               <span role="button" class="success--text font-weight-medium font-size-2 mr-2" @click="doUiAction('startUpdateItem', item)">
                 <v-icon size="16" class="success--text">mdi-note-edit-outline</v-icon>修改
               </span>
+              <span role="button" class="red--text text--accent-2 font-weight-medium font-size-2" @click="">
+                <v-icon size="16" class="red--text text--accent-2">mdi-star</v-icon>录取
+              </span>
               <span role="button" class="red--text text--accent-2 font-weight-medium font-size-2" @click="doUiAction('deleteItem', item)">
                 <v-icon size="16" class="red--text text--accent-2">mdi-trash-can-outline</v-icon>删除
               </span>
@@ -96,6 +101,9 @@ SQL END!-->
               <v-list dense>
                 <v-list-item @click="doUiAction('startUpdateItem', item)">
                   <v-list-item-title>修改</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="">
+                  <v-list-item-title>录取</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="doUiAction('deleteItem', item)">
                   <v-list-item-title>删除</v-list-item-title>
@@ -264,13 +272,11 @@ new Vue({
         v => !!v || 'This is required',
       ],
     },
-    // 下拉选项
-    constantObj: {
-      gender: [{"value": null, "text": "全部"}, {"value": "male", "text": "男"}, {"value": "female", "text": "女"}],
-    },
     serverSearchInput: {
-      gender: null
-    },
+        gender: null,
+        level: null, //选中的录入时间(届)
+      },
+      levels: [], // 录入时间数据
     searchInput: null,
     isTableLoading: true,
     tableData: [],
@@ -309,6 +315,9 @@ new Vue({
   },
   mounted() {
     this.doUiAction('getTableData');
+    //这里generatePastYears()方法的参数为指定可以查询过去多少年的学生
+    this.levels = this.generatePastLevels(20);
+    this.levels.unshift({ text: '全部', value: null }); // 添加 "全部" 选项
   },
   methods: {
     async doUiAction(uiActionId, uiActionData) {
@@ -512,8 +521,28 @@ new Vue({
     async clearDeleteItem() {
       this.deleteItem = {};
       this.deleteItemId = null;
-    }
+    },
     // ---------- <<<<<<<<<<< 删除数据 uiAction ---------
+
+    // ---------- <<<<<<<<<<< 根据条件筛选出对应的录入时间（年）和查找完毕返回全部数据 ---------
+    generatePastLevels(n) {
+        const currentLevel = new Date().getFullYear();
+        return Array.from({ length: n }, (_, i) => ({ text: `${currentLevel - i}`, value: currentLevel - i }));
+      },
+      doQuery() {
+        // 保存当前的查询条件
+        const currentLevel = this.serverSearchInput.level;
+
+        // 执行查询操作
+        this.doUiAction('getTableData');
+
+        // 如果选中的是 "全部"，则恢复查询条件
+        if (currentLevel === null) {
+          this.serverSearchInput.level = null;
+        }
+      },
+      // ---------- 根据条件筛选出对应的录入时间（年）和查找完毕返回全部数据 >>>>>>>>>>>> --------
+
   }
 })
 </script>
