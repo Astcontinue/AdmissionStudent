@@ -1,0 +1,62 @@
+// 读取文件
+function aimport() {
+    var files = $("input[name=xlfile]")[0].files;
+    do_file(files);
+}
+
+// 解析文件
+var do_file = (function() {
+    return function do_file(files) {
+        rABS = false;
+        var f = files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var data = e.target.result;
+            if (!rABS) data = new Uint8Array(data);
+            process_wb(X.read(data, { type: rABS ? 'binary' : 'array' }));
+        };
+        if (rABS) reader.readAsBinaryString(f);
+        else reader.readAsArrayBuffer(f);
+    };
+})();
+
+// 转换为JSON
+var to_json = function to_json(workbook) {
+    var result = {};
+    workbook.SheetNames.forEach(function(sheetName) {
+        var roa = X.utils.sheet_to_json(workbook.Sheets[sheetName], {header: 1});
+        if (roa.length) result[sheetName] = roa;
+    });
+    return JSON.stringify(result, 2, 2);
+};
+
+// 导入数据库
+async function process_wb(wb) {
+    output = to_json(wb);
+    output_obj = JSON.parse(output);
+    vals = output_obj['Sheet1'];
+    vals_length = vals.length - 1;
+    for (var i = 1; i <= vals_length; i++) {
+        value = vals[i];
+        var datastring = {
+            studentId: value[0],
+            name: value[1],
+            score: value[2]
+        };
+        const package = {
+            packageId: '123456',
+            packageType: 'httpRequest',
+            appData: {
+                appId: `${window.appInfo.appId}`,
+                pageId: 'protocolDemo',
+                actionId: 'insertItem',
+                userAgent: 'demo_userAgent',
+                authToken: localStorage.getItem(`${window.appInfo.appId}_authToken`),
+                actionData: datastring,
+            }
+        };
+        const result = await axios(package);
+        const rows = result.data.appData.resultData.rows;
+        console.log('rows', rows);
+    }
+}
