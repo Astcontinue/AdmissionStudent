@@ -36,3 +36,7 @@ export default defineConfig({
     entries: ['./src/**/*.vue']
   }
 });
+
+/**
+ * 这个文件主要用于配置 Vite 构建工具，确保 Vue 和 Vuetify 等框架能够正确地在开发和生产环境中运行。它通过插件、别名、预处理器选项等设置，优化了项目的开发体验和构建性能
+ */

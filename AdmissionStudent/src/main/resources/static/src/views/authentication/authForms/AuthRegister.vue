@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
 const show1 = ref(false);
 const password = ref('');
-const email = ref('');
+const username = ref('');
 const Regform = ref();
 const firstname = ref('');
 const lastname = ref('');
@@ -17,13 +17,13 @@ const passwordRules = ref([
 const firstRules = ref([(v: string) => !!v || 'First Name is required']);
 const lastRules = ref([(v: string) => !!v || 'Last Name is required']);
 // Email validation rules
-const emailRules = ref([
-  (v: string) => !!v.trim() || 'E-mail is required',
+const usernameRules = ref([
+  (v: string) => !!v.trim() || 'UserName is required',
   (v: string) => {
     const trimmedEmail = v.trim();
-    return !/\s/.test(trimmedEmail) || 'E-mail must not contain spaces';
+    return !/\s/.test(trimmedEmail) || 'Username must not contain spaces';
   },
-  (v: string) => /.+@.+\..+/.test(v.trim()) || 'E-mail must be valid'
+  (v: string) => /.+@.+\..+/.test(v.trim()) || 'Username must be valid'
 ]);
 
 function validate() {
@@ -76,15 +76,15 @@ function validate() {
     <div class="mb-6">
       <v-label>Email Address*</v-label>
       <v-text-field
-        v-model="email"
-        :rules="emailRules"
+        v-model="username"
+        :rules="usernameRules"
         placeholder="demo@company.com"
         class="mt-2"
         required
         hide-details="auto"
         variant="outlined"
         color="primary"
-        @input="email"
+        @input="username"
       ></v-text-field>
     </div>
     <div class="mb-6">

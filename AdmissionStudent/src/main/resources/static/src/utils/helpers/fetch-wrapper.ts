@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/auth';
 
+
 export const fetchWrapper = {
   get: request('GET'),
   post: request('POST'),
@@ -65,3 +66,7 @@ function handleResponse(response: Response): Promise<UserData> {
     return data as UserData;
   });
 }
+
+/**
+ * 即使你已经有了真实的后端，fetch-wrapper.ts 文件中的代码仍然非常有用。它不仅简化了与后端的交互，还提供了重要的安全性和错误处理功能。你可以根据实际情况调整其中的配置（如 API URL 和认证逻辑），以确保其与你的后端无缝集成。
+ */

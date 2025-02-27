@@ -11,20 +11,17 @@ import com.admissionstudent_server.service.EmployeeService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.AccountLockedException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @Slf4j
 @RequestMapping("/admin/employee")
-
 public class EmployeeController {
 
     @Autowired
@@ -40,7 +37,6 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
-
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) throws AccountLockedException, AccountNotFoundException {
         log.info("员工登录：{}", employeeLoginDTO);
 

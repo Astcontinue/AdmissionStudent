@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { fetchWrapper } from "@/utils/helpers/fetch-wrapper";
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '../../../../../../../../../AdmissionStudent/src/main/resources/static/src/stores/auth';
 import { Form } from 'vee-validate';
 
 const checkbox = ref(false);
 const valid = ref(false);
 const show1 = ref(false);
 const password = ref('');
-const username = ref(''); // 删除: const username = ref('info@codedthemes.com');
+const username = ref('');
+
+
 
 // Password validation rules
 const passwordRules = ref([
@@ -18,13 +21,13 @@ const passwordRules = ref([
   (v: string) => v.length <= 10 || 'Password must be less than 10 characters'
 ]);
 // Email validation rules
-const emailRules = ref([
-  (v: string) => !!v.trim() || 'E-mail is required',
+const userRules = ref([
+  (v: string) => !!v.trim() || 'Username is required',
   (v: string) => {
     const trimmedEmail = v.trim();
-    return !/\s/.test(trimmedEmail) || 'E-mail must not contain spaces';
+    return !/\s/.test(trimmedEmail) || 'Username must not contain spaces';
   },
-  (v: string) => /.+@.+\..+/.test(v.trim()) || 'E-mail must be valid'
+  (v: string) => /.+@.+\..+/.test(v.trim()) || 'Username must be valid'
 ]);
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -42,20 +45,19 @@ function validate(values: any, { setErrors }: any) {
 
 <template>
   <div class="d-flex justify-space-between align-center">
-    <h3 class="text-h3 text-center mb-0">登录</h3>
-    <router-link to="/register" class="text-primary text-decoration-none">没有账户?</router-link>
+    <h3 class="text-h3 text-center mb-0">Login</h3>
+    <router-link to="/register" class="text-primary text-decoration-none">Don't Have an account?</router-link>
   </div>
   <Form @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
 
 
 
-
     <div class="mb-6">
-      <v-label>用户名</v-label>
+      <v-label>Username</v-label>
       <v-text-field
-        aria-label="用户名"
+        aria-label="email address"
         v-model="username"
-        :rules="emailRules"
+        :rules="userRules"
         class="mt-2"
         required
         hide-details="auto"
@@ -67,11 +69,10 @@ function validate(values: any, { setErrors }: any) {
 
 
 
-
     <div>
-      <v-label>密码</v-label>
+      <v-label>Password</v-label>
       <v-text-field
-        aria-label="密码"
+        aria-label="password"
         v-model="password"
         :rules="passwordRules"
         required
@@ -82,9 +83,6 @@ function validate(values: any, { setErrors }: any) {
         class="mt-2"
         @input="password"
       >
-
-
-
         <template v-slot:append-inner>
           <v-btn color="secondary" icon rounded variant="text">
             <EyeInvisibleOutlined :style="{ color: 'rgb(var(--v-theme-secondary))' }" v-if="show1 == false" @click="show1 = !show1" />
@@ -98,26 +96,16 @@ function validate(values: any, { setErrors }: any) {
       <v-checkbox
         v-model="checkbox"
         :rules="[(v: any) => !!v || 'You must agree to continue!']"
-        label="保持登录状态"
+        label="Keep me sign in"
         required
         color="primary"
         class="ms-n2"
         hide-details
       ></v-checkbox>
-
-
-
       <div class="ml-auto">
-        <router-link to="/login1" class="text-darkText link-hover">忘记密码?</router-link>
+        <router-link to="/login1" class="text-darkText link-hover">Forgot Password?</router-link>
       </div>
-
-
     </div>
-
-
-
-
-
     <v-btn color="primary" :loading="isSubmitting" block class="mt-5" variant="flat" size="large" :disabled="valid" type="submit">
       Login</v-btn
     >
