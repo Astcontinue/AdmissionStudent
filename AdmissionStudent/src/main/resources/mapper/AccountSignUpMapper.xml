@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admissionstudent_server.mapper.AccountMapper">
+
+
+
+    <insert id="insertAccount">
+        insert into user
+            (firstname, lastname, company, username, password,create_time)
+        VALUES (#{firstname}, #{lastname}, #{company}, #{username}, #{password},#{createTime})
+    </insert>
+
+</mapper>

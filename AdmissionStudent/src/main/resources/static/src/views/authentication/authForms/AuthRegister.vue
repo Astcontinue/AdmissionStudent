@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
+import { useUIStore } from '@/stores/ui';
 import { ref } from 'vue';
 // icons
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons-vue';
+
+// 响应式数据
 const show1 = ref(false);
 const password = ref('');
 const username = ref('');
 const Regform = ref();
 const firstname = ref('');
 const lastname = ref('');
+const company = ref('');
+
+// 初始化 Store
+const authStore = useAuthStore();
+const uiStore = useUIStore();
+
 // Password validation rules
 const passwordRules = ref([
   (v: string) => !!v || 'Password is required',
@@ -26,8 +36,38 @@ const usernameRules = ref([
   (v: string) => /.+@.+\..+/.test(v.trim()) || 'Username must be valid'
 ]);
 
-function validate() {
-  Regform.value.validate();
+
+// 注册方法
+async function register() {
+  try {
+    // 1. 触发表单验证
+    const isValid = await Regform.value.validate();
+    if (!isValid) {
+      alert('请填写必填字段');
+      return;
+    }
+
+    // 2. 显示加载状态
+    uiStore.isLoading = true;
+
+    // 3. 调用注册接口
+    await authStore.register(
+        firstname.value,
+        lastname.value,
+        username.value,
+        password.value,
+        company.value  // 传递公司字段
+    );
+
+    // 4. 注册成功后的跳转（已在 auth.ts 中处理）
+
+  } catch (error: any) {
+    // 5. 错误处理
+    alert(`注册失败: ${error.message || '未知错误'}`);
+  } finally {
+    // 6. 关闭加载状态
+    uiStore.isLoading = false;
+  }
 }
 </script>
 
@@ -36,6 +76,8 @@ function validate() {
     <h3 class="text-h3 text-center mb-0">Sign up</h3>
     <router-link to="/login1" class="text-primary text-decoration-none">Already have an account?</router-link>
   </div>
+
+
   <v-form ref="Regform" lazy-validation action="/dashboards/analytical" class="mt-7 loginForm">
     <v-row class="my-0">
       <v-col cols="12" sm="6" class="py-0">
@@ -53,6 +95,8 @@ function validate() {
           ></v-text-field>
         </div>
       </v-col>
+
+
       <v-col cols="12" sm="6" class="py-0">
         <div class="mb-6">
           <v-label>Last Name*</v-label>
@@ -69,12 +113,21 @@ function validate() {
         </div>
       </v-col>
     </v-row>
+
     <div class="mb-6">
       <v-label>Company</v-label>
-      <v-text-field hide-details="auto" variant="outlined" class="mt-2" color="primary" placeholder="Demo Inc."></v-text-field>
+      <v-text-field
+          v-model="company"
+          hide-details="auto"
+          variant="outlined"
+          class="mt-2"
+          color="primary"
+          placeholder="Demo Inc."
+      ></v-text-field>
     </div>
+
     <div class="mb-6">
-      <v-label>Email Address*</v-label>
+      <v-label>User Name*</v-label>
       <v-text-field
         v-model="username"
         :rules="usernameRules"
@@ -87,6 +140,7 @@ function validate() {
         @input="username"
       ></v-text-field>
     </div>
+
     <div class="mb-6">
       <v-label>Password</v-label>
       <v-text-field
@@ -118,6 +172,13 @@ function validate() {
         <router-link to="/register" class="text-primary link-hover font-weight-medium">Privacy Policy</router-link>
       </h6>
     </div>
-    <v-btn color="primary" block class="mt-4" variant="flat" size="large" @click="validate()">Create Account</v-btn>
+    <v-btn
+        color="primary"
+        block class="mt-4"
+        variant="flat"
+        size="large"
+        @click="register"
+        :disabled="uiStore.isLoading"
+    >{{ uiStore.isLoading ? '注册中...' : 'Create Account'}}</v-btn>
   </v-form>
 </template>

@@ -12,16 +12,19 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeLoginVO implements Serializable {
+public class UserLoginVO implements Serializable {
 
 
     private Long id;
 
 
-    private String userName;
+    private String username;
 
 
-    private String name;
+    private String firstname;
+
+
+    private String lastname;
 
 
     private String token;

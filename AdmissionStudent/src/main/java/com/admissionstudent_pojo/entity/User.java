@@ -12,30 +12,42 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String username;
+    private String studentid;
 
-    private String name;
+    private String firstname;
+
+    private String lastname;
+
+    private String photo;
+
+    private String idnumber;
+
+    private String gender;
+
+    private String dateofbirth;
+
+    private String company;
+
+    private String phonenumber;
+
+    private String educationalbackground;
+
+    private String remark;
+
+    private String username;
 
     private String password;
 
-    private String phone;
-
-    private String sex;
-
-    private String idNumber;
-
     private Integer status;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
     private Long createUser;

@@ -66,3 +66,7 @@ router.afterEach(() => {
   const uiStore = useUIStore();
   uiStore.isLoading = false;
 });
+
+/**
+ * 这个文件的作用是配置和管理 Vue 应用的路由系统，确保用户在访问不同页面时能够正确地进行身份验证和页面加载状态的处理。它通过定义路由规则、设置全局守卫和管理 UI 状态，实现了应用的导航逻辑和用户体验优化。
+ */

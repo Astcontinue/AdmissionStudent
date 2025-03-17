@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class StudentDTO implements Serializable {
+public class UserDTO implements Serializable {
 
     // 主键
     private Long id;
