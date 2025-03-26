@@ -6,6 +6,7 @@ import {
   LoginOutlined,
   ProfileOutlined,
   FontSizeOutlined,
+  EditOutlined,
   BgColorsOutlined,
   BarcodeOutlined,
   CrownOutlined
@@ -45,6 +46,10 @@ const sidebarItem: menu[] = [
     icon: ProfileOutlined,
     to: '/register'
   },
+
+
+
+
   { header: 'Utilities' },
   {
     title: 'Typography',
@@ -52,6 +57,11 @@ const sidebarItem: menu[] = [
     to: '/typography'
   },
   {
+    title: 'EditProFile',
+    icon: EditOutlined,
+    to: '/editprofile'
+  },
+  /*{
     title: 'Color',
     icon: BgColorsOutlined,
     to: '/colors'
@@ -65,7 +75,11 @@ const sidebarItem: menu[] = [
     title: 'Ant Icons',
     icon: CrownOutlined,
     to: '/icon/ant'
-  },
+  },*/
+
+
+
+
   { header: 'Support' },
   {
     title: 'Sample Page',

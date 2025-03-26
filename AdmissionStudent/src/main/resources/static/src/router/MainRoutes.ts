@@ -22,6 +22,11 @@ const MainRoutes = {
       component: () => import('@/views/typography/TypographyPage.vue')
     },
     {
+      name: 'EditProFile',
+      path: '/editprofile',
+      component: () => import('@/views/editprofile/EditProfilePage.vue')
+    },
+    /*{
       name: 'Colors',
       path: '/colors',
       component: () => import('@/views/colors/ColorPage.vue')
@@ -35,7 +40,7 @@ const MainRoutes = {
       name: 'Color',
       path: '/icon/ant',
       component: () => import('@/views/icons/AntDesignIcons.vue')
-    },
+    },*/
     {
       name: 'other',
       path: '/sample-page',

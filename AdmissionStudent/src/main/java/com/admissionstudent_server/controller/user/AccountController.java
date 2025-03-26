@@ -1,5 +1,6 @@
 package com.admissionstudent_server.controller.user;
 
+import com.admissionstudent_common.constant.MessageConstant;
 import com.admissionstudent_common.result.Result;
 import com.admissionstudent_pojo.dto.UserSignUpDTO;
 import com.admissionstudent_server.service.AccountService;
@@ -21,18 +22,24 @@ public class AccountController {
     public Result<String> save(@RequestBody UserSignUpDTO userSignUpDTO) {
         log.info("注册账号，{}", userSignUpDTO);
         //查询是否有重复的账号
-        String username = accountService.selectUsername(userSignUpDTO.getUsername());
+        try {
+            String username = accountService.selectUsername(userSignUpDTO.getUsername());
 
-        //注册失败
-        if (username != null) {
-            log.warn("账号已存在，注册失败：{}", userSignUpDTO.getUsername());
-            return Result.error("账号已存在，注册失败");
+            //注册失败
+            if (username != null) {
+                log.warn("账号已存在，注册失败：{}", userSignUpDTO.getUsername());
+                return Result.error(MessageConstant.ACCOUNT_ALREADY_EXISTS);
+            }
+
+            //注册成功
+            accountService.save(userSignUpDTO);
+
+            log.info("注册成功：{}", userSignUpDTO.getUsername());
+            return Result.success(MessageConstant.REGISTRATION_SUCCESS);
+        } catch (Exception e) {
+            log.error("注册异常：", e);
+            return Result.error("系统错误"); // code=500
         }
 
-        //注册成功
-        accountService.save(userSignUpDTO);
-
-        log.info("注册成功：{}", userSignUpDTO.getUsername());
-        return Result.success("注册成功");
     }
 }

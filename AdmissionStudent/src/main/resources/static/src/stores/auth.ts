@@ -43,7 +43,8 @@ export const useAuthStore = defineStore({
             ...JSON.parse(localStorage.getItem('user') || '{}')
         } as User,
         returnUrl: null,
-        loading: false
+        loading: false,
+        regError: false,
     }),
     actions: {
 
@@ -64,12 +65,12 @@ export const useAuthStore = defineStore({
                 }>(`${baseUrl}/user/login`, { username, password });
 
                 this.user = {
-                    id: response.data.id,
-                    username: response.data.username,
-                    firstname: response.data.firstname,
-                    lastname: response.data.lastname,
-                    role: response.data.role || 'guest',
-                    photo: response.data.photo || ''
+                    id: response.data.data.id,
+                    username: response.data.data.username,
+                    firstname: response.data.data.firstname,
+                    lastname: response.data.data.lastname,
+                    role: response.data.data.role || 'guest',
+                    photo: response.data.data.photo || ''
                 };
 
                 // 安全存储方案（仅存必要字段）
@@ -104,32 +105,7 @@ export const useAuthStore = defineStore({
         /**
          * 注册功能的前端接口
          */
-        async register(firstname: string, lastname: string, username: string, password: string, company: string) {
-            try {
-                // 1. 发送注册请求
-                const user = await fetchWrapper.post(`${baseUrl}/account/register`, {
-                    firstname,
-                    lastname,
-                    username,
-                    password,
-                    company
-                });
-                // 注册成功后直接登录（可选）
-                // 2. 自动登录处理
-                this.user = user;
-                localStorage.setItem('user', JSON.stringify(user));
-
-                // 3. 页面跳转
-                router.push('/dashboard'); // 跳转到仪表盘
-            } catch (error) {
-                const message = error.response?.data?.message || '注册失败，请检查网络连接';
-                console.error('注册错误详情:', {
-                    code: error.code,
-                    stack: error.stack
-                });
-                throw new Error(message); // 提供友好错误信息
-            }
-        },
+        async register(firstname: string, lastname: string, username: string, password: string, company: string) {},
 
 
         /**

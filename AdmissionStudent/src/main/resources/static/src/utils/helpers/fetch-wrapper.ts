@@ -47,7 +47,7 @@ function authHeader(url: string): Record<string, string> {
   }
 }
 
-function handleResponse(response: Response): Promise<UserData> {
+function handleResponse(response: Response): Promise<{ status: number; data: any }> {
   return response.text().then((text: string) => {
     const data = text && JSON.parse(text);
 
@@ -59,11 +59,11 @@ function handleResponse(response: Response): Promise<UserData> {
       }
 
       const error: string = (data && data.message) || response.statusText;
-      return Promise.reject(error);
+      return Promise.reject({ status: response.status, error });
     }
 
     // Ensure data is of type UserData
-    return data as UserData;
+    return { status: response.status, data };
   });
 }
 

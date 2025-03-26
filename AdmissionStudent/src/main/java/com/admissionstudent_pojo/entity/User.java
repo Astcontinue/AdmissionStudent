@@ -18,27 +18,15 @@ public class User implements Serializable {
 
     private Long id;
 
-    private String studentid;
-
     private String firstname;
 
     private String lastname;
 
     private String photo;
 
-    private String idnumber;
-
     private String gender;
 
-    private String dateofbirth;
-
     private String company;
-
-    private String phonenumber;
-
-    private String educationalbackground;
-
-    private String remark;
 
     private String username;
 
